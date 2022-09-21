@@ -72,7 +72,7 @@ class Board{
     }
 
     // 9면
-    aroundIdxes(idx,containSelf){
+    aroundedIdxes(idx,containSelf){
         // let idx = this.xyToIdx(x,y);
         let idxes = [];
         let nIdx = 0;

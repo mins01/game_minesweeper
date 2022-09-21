@@ -21,10 +21,15 @@ msb.debug = true
 msb.setBoard(6,6,-1);
 msb.mineBoard = mb; 
 
-// msb.selectXy(0,1);
-// msb.selectXy(1,1);
+// msb.digXy(0,1);
+// msb.digXy(1,1);
 
 // console.log(msb.countAroundedMines(msb.xyToIdx(1,2)));
-console.log(msb.selectXy(1,2)); ;
-mb.printBoard();
+console.log(msb.digXy(1,2)); ;
+// mb.printBoard();
+msb.printBoard();
+
+console.log(msb.digXy(3,2)); ;
+console.log(msb.flagXy(3,3,1)); ;
+// mb.printBoard();
 msb.printBoard();

@@ -20,39 +20,56 @@ class MineSearchBoard extends Board{
     setBoard(w,h){
         this.board = [];
         for(var i=0,m=w*h;i<m;i++){
-            this.board.push({'value':-1,'cover':-1});
+            this.board.push({'value':-1,'cover':-1,'flag':0});
         }
         this.boardWidth = w;
         this.boardHeight = h;
         this.maxIdx = this.board.length - 1;
         this.printDebug('setBoard',Array.from(arguments).join(','))
     }
-
-    selectXy(x,y){
-        this.printDebug('selectXy',Array.from(arguments).join(','));
-        return this.select(this.xyToIdx(x,y));
+    flagXy(x,y,v){
+        this.printDebug('flagXy',Array.from(arguments).join(','));
+        return this.flag(this.xyToIdx(x,y),v);
     }
-    select(idx){
-        let idxes = this.aroundIdxes(idx,true);
+    flag(idx,v){
+        this.board[idx].flag = v;
+    }
+    digXy(x,y){
+        this.printDebug('digXy',Array.from(arguments).join(','));
+        return this.dig(this.xyToIdx(x,y));
+    }
+    dig(idx){
+        let idxes = this.aroundedIdxes(idx,true);
         idxes.forEach((v,k)=>{
             // console.log(v,this.board[v],this.countAroundedMines(v))
             if(this.board[v].value == -1){
-                this.board[v].cover = this.countCrossedMines(v)
+                this.board[v].cover = this.countAroundedMines(v)
             }
         });
 
         if(this.mineBoard.board[idx] != 0){
             this.board[idx].value = -2;
-            this.board[idx].cover = -2;
+            // this.board[idx].cover = -2;
             return -2;
         }else{
             this.board[idx].value = 0;
-            this.board[idx].cover = 0;
+            // this.board[idx].cover = 0;
             return 0;
         }
     }
     countCrossedMines(idx){
         let idxes = this.crossedIdxes(idx,true);
+        let count = 0;
+        idxes.forEach((v,i)=>{
+            // console.log(v,this.mineBoard.board[v])
+            if(this.mineBoard.board[v]!==0){
+                count++;
+            }
+        });
+        return count;
+    }
+    countAroundedMines(idx){
+        let idxes = this.aroundedIdxes(idx,true);
         let count = 0;
         idxes.forEach((v,i)=>{
             // console.log(v,this.mineBoard.board[v])
@@ -75,7 +92,7 @@ class MineSearchBoard extends Board{
                 let defIdx = i;
                 let chunk = ['['+'y'+Math.floor(i/this.boardWidth)+']'];
                 chunk = chunk.concat(this.board.slice(i, i + chunkSize).map((v,k)=>{
-                    return (this.mineBoard.board[defIdx+k]===0?'-':'M')+':'+v.value+':'+v.cover;
+                    return (this.mineBoard.board[defIdx+k]===0?'-':'M')+':'+(v.flag===0?'-':v.flag)+':'+(v.value==-1?'-':v.value)+':'+(v.cover==-1?'-':v.cover);
                 }));
                 // chunk = chunk.concat(this.board.slice(i, i + chunkSize));
                 arrs.push(chunk.join('\t'));
