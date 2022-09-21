@@ -24,6 +24,7 @@ msb.mineBoard = mb;
 // msb.digXy(0,1);
 // msb.digXy(1,1);
 
+msb.printBoard();
 // console.log(msb.countAroundedMines(msb.xyToIdx(1,2)));
 console.log(msb.digXy(1,2)); ;
 // mb.printBoard();

@@ -70,23 +70,46 @@ class Board{
     xyToIdx(x,y){
         return this.boardWidth*y+x;
     }
-
+    relIdx(idx,x,y){
+        let nIdx = -1,nX=-1,nY=-1;
+        nIdx = idx+this.boardWidth*y+1*x;
+        nX = nIdx % this.boardWidth;
+        nY = Math.ceil(nIdx / this.boardWidth);
+        if(nX < 0 || nY < 0 || nIdx < 0 || nX > this.boardWidth-1 || nY > this.boardHeight -1 || nIdx > this.maxIdx){
+            return null;
+        }
+        return nIdx
+    }
     // 9면
     aroundedIdxes(idx,containSelf){
         // let idx = this.xyToIdx(x,y);
         let idxes = [];
-        let nIdx = 0;
-        nIdx = idx-this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
-        nIdx = idx-this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
-        nIdx = idx-this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
-        nIdx = idx-0-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        let nIdx = -1,x=-1,y=-1;
+
+        nIdx = this.relIdx(idx, -1, -1); if(nIdx !== null ) idxes.push(nIdx);
+        nIdx = this.relIdx(idx,  0, -1); if(nIdx !== null ) idxes.push(nIdx);
+        nIdx = this.relIdx(idx, +1, -1); if(nIdx !== null ) idxes.push(nIdx);
+        nIdx = this.relIdx(idx, -1,  0); if(nIdx !== null ) idxes.push(nIdx);
         if(containSelf){ 
-            nIdx = idx-0; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx); //자기자신 
+            nIdx = this.relIdx(idx,  0,  0); if(nIdx !== null ) idxes.push(nIdx);
         }
-        nIdx = idx-0+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
-        nIdx = idx+this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
-        nIdx = idx+this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
-        nIdx = idx+this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = this.relIdx(idx, +1,  0); if(nIdx !== null ) idxes.push(nIdx);
+        nIdx = this.relIdx(idx, -1, +1); if(nIdx !== null ) idxes.push(nIdx);
+        nIdx = this.relIdx(idx,  0, +1); if(nIdx !== null ) idxes.push(nIdx);
+        nIdx = this.relIdx(idx, +1, +1); if(nIdx !== null ) idxes.push(nIdx);
+        
+
+        // nIdx = idx-this.boardWidth-1; x=nIdx%this.boardWidth; y if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx-this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx-this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx-0-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // if(containSelf){ 
+        //     nIdx = idx-0; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx); //자기자신 
+        // }
+        // nIdx = idx-0+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx+this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx+this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx+this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
         return idxes;
     }
 

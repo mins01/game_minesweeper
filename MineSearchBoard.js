@@ -69,7 +69,7 @@ class MineSearchBoard extends Board{
         return count;
     }
     countAroundedMines(idx){
-        let idxes = this.aroundedIdxes(idx,true);
+        let idxes = this.aroundedIdxes(idx,false);
         let count = 0;
         idxes.forEach((v,i)=>{
             // console.log(v,this.mineBoard.board[v])
