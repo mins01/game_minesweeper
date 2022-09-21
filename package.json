@@ -1,0 +1,20 @@
+{
+  "name": "game_minesweeper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.Board.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mins01/game_minesweeper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mins01/game_minesweeper/issues"
+  },
+  "homepage": "https://github.com/mins01/game_minesweeper#readme",
+  "type": "module"
+}
