@@ -1,3 +1,6 @@
+// @deprecated
+
+
 // const Mineboard = require("./MineBoard");
 import Mineboard from "./Mineboard.js";
 

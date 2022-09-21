@@ -70,18 +70,27 @@ class Board{
     xyToIdx(x,y){
         return this.boardWidth*y+x;
     }
-    relIdx(idx,x,y){
-        let nIdx = -1,nX=-1,nY=-1;
-        nIdx = idx+this.boardWidth*y+1*x;
-        nX = nIdx % this.boardWidth;
-        nY = Math.ceil(nIdx / this.boardWidth);
+    idxToXy(idx){
+        return [idx%this.boardWidth,Math.floor(idx/this.boardWidth)];
+    }
+    relIdx(idx,gapX,gapY){
+        let nIdx = -1,nX=-1,nY=-1,x=-1,y=-1;
+
+        x = idx % this.boardWidth;
+        y = Math.floor(idx / this.boardWidth);
+        nX = x+gapX;
+        nY = y+gapY;
+        nIdx = this.xyToIdx(nX,nY)        
         if(nX < 0 || nY < 0 || nIdx < 0 || nX > this.boardWidth-1 || nY > this.boardHeight -1 || nIdx > this.maxIdx){
+            // console.log(nX,nY,nIdx,'x');
             return null;
         }
+        // console.log(nX,nY,nIdx);
         return nIdx
     }
     // 9면
     aroundedIdxes(idx,containSelf){
+        // console.log('----------',idx);
         // let idx = this.xyToIdx(x,y);
         let idxes = [];
         let nIdx = -1,x=-1,y=-1;

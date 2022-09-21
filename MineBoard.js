@@ -1,3 +1,6 @@
+// @deprecated
+
+
 // const Board = require("./Board");
 import Board from "./Board.js";
 

@@ -2,10 +2,6 @@
 import Board from "./Board.js";
 /**
  * 지뢰 찾기 보드
- * -2:지뢰가 터짐
- * -1:찾기전
- * 0:없음
- * >0:주위의 지뢰 수
  */
 class MineSearchBoard extends Board{
     constructor() {
@@ -20,14 +16,50 @@ class MineSearchBoard extends Board{
     setBoard(w,h){
         this.board = [];
         for(var i=0,m=w*h;i<m;i++){
-            this.board.push({'value':-1,'cover':-1,'flag':0,'mine':0});
+            this.board.push(
+                {
+                    'open':0, //0:befoer open, 1:after open, 2: boom!
+                    'cover':-1, //hint number
+                    'flag':0, //0:no flag, 1:flag
+                    'mine':0 //0:normal, 1:mine!
+                }
+                );
         }
         this.boardWidth = w;
         this.boardHeight = h;
         this.maxIdx = this.board.length - 1;
         this.printDebug('setBoard',Array.from(arguments).join(','))
     }
-
+    // mine에 flag가 표시된 수
+    get countFlagedMine(){
+        let count = 0;
+        this.board.forEach((v,k)=>{if(v.mine!==0 && v.flag !==0) count++; })
+        return count;
+    }
+    // mine 수
+    get countMine(){
+        let count = 0;
+        this.board.forEach((v,k)=>{if(v.mine!==0) count++ })
+        return count;
+    }
+    // flag 수
+    get countFlag(){
+        let count = 0;
+        this.board.forEach((v,k)=>{if(v.flag!==0) count++ })
+        return count;
+    }
+    // open 수
+    get countOpen(){
+        let count = 0;
+        this.board.forEach((v,k)=>{if(v.open!==0) count++ })
+        return count;
+    }
+    // 터진 폭탄 수
+    get countBoomedOpen(){
+        let count = 0;
+        this.board.forEach((v,k)=>{if(v.open===2) count++ })
+        return count;
+    }
     // 지정위치 지뢰 매설(1개)
     plantMine(x,y,v){
         this.printDebug('plantMine',Array.from(arguments))
@@ -44,8 +76,12 @@ class MineSearchBoard extends Board{
         r.forEach((v)=>{this.board[v].mine=1})
     }
 
-
     flagXy(x,y,v){
+        if(v===undefined){v=1;}
+        if(x < 0 || y < 0 || x >= this.boardWidth || y >= this.boardHeight){
+            this.printDebug('flagXy',Array.from(arguments).join(','),false);
+            return false;
+        }
         this.printDebug('flagXy',Array.from(arguments).join(','));
         return this.flag(this.xyToIdx(x,y),v);
     }
@@ -53,27 +89,44 @@ class MineSearchBoard extends Board{
         this.board[idx].flag = v;
     }
     digXy(x,y){
+        if(x < 0 || y < 0 || x >= this.boardWidth || y >= this.boardHeight){
+            this.printDebug('digXy',Array.from(arguments).join(','),false);
+            return false;
+        }
         this.printDebug('digXy',Array.from(arguments).join(','));
         return this.dig(this.xyToIdx(x,y));
     }
     dig(idx){
+        
         let idxes = this.aroundedIdxes(idx,true);
+        let nIdxes = []; //다음으로 열 위치
+        let r = 0; //찾기 전
+        if(this.board[idx].open !==0){ //이미 오픈했을 경우
+            return -1;
+        }else if(this.board[idx].mine != 0){
+            this.board[idx].open = 2; //
+            r = 2; //폭탄 선택
+        }else{
+            this.board[idx].open = 1;
+            r = 1; //폭탄 없음
+        }
+
         idxes.forEach((v,k)=>{
             // console.log(v,this.board[v],this.countAroundedMines(v))
-            if(this.board[v].value == -1){
+            if(this.board[v].open == 0){
                 this.board[v].cover = this.countAroundedMines(v)
+                if(this.board[v].mine===0 && this.board[v].cover===0){
+                    nIdxes.push(v);
+                }
             }
         });
+        nIdxes.forEach((v,k)=>{
+            if(this.board[v].open!==0) return;
+            this.printDebug('dig:auto',v,this.idxToXy(v));
+            this.dig(v);
+        })
 
-        if(this.board[idx].mine != 0){
-            this.board[idx].value = -2;
-            // this.board[idx].cover = -2;
-            return -2;
-        }else{
-            this.board[idx].value = 0;
-            // this.board[idx].cover = 0;
-            return 0;
-        }
+        return r; 
     }
     countCrossedMines(idx){
         let idxes = this.crossedIdxes(idx,true);
@@ -110,7 +163,7 @@ class MineSearchBoard extends Board{
             let defIdx = i;
             let chunk = ['['+'y'+Math.floor(i/this.boardWidth)+']'];
             chunk = chunk.concat(this.board.slice(i, i + chunkSize).map((v,k)=>{
-                return (v.mine===0?'-':'M')+':'+(v.flag===0?'-':v.flag)+':'+(v.value==-1?'-':(v.value==-2?'X':v.value))+':'+(v.cover==-1?'-':v.cover);
+                return (v.mine===0?'-':'M')+':'+(v.flag===0?'-':v.flag)+':'+(v.open==-1?'-':(v.open==-2?'X':v.open))+':'+(v.cover==-1?'-':v.cover);
             }));
             // chunk = chunk.concat(this.board.slice(i, i + chunkSize));
             arrs.push(chunk.join('\t'));
@@ -118,6 +171,8 @@ class MineSearchBoard extends Board{
         var t = '#'+'='.repeat(this.boardWidth*8)+'#';
         console.log(t)
         console.log('|'+' '.repeat(Math.floor((t.length-12)/2))+'printBoard'+' '.repeat(Math.floor((t.length-12)/2))+'|')
+        console.log('| Open:'+this.countOpen + ' / Flag:'+this.countFlag + ' / Mine:' + this.countMine  + ' / FlagedMine:' + this.countFlagedMine + ' / BoomedOpen:' + this.countBoomedOpen + ' / Area:' + this.board.length);
+        
         var t2 = '#'+'-'.repeat(this.boardWidth*8)+'#';
         console.log(t2)
         console.log(arrs.join('\n'));
