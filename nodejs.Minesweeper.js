@@ -22,24 +22,43 @@ ms.debug = true
 ms.msb.debug = true; 
 ms.setBoard(3,3,0);
 ms.msb.plantMine(0,1);
+ms.msb.plantMine(1,1);
+ms.msb.plantMine(2,1);
 // ms.msb.plantRandomMines(1);
 ms.start();
+
+
+// ms.flagXy(0,1)?ms.draw():1;
+// ms.flagXy(1,1)?ms.draw():1;
+// ms.flagXy(2,1)?ms.draw():1;
+// ms.end()
+// process.exit()
 
 
 // ms.digXy(1,2);
 // ms.digXy(3,2);
 
 
-ms.draw();
-process.stdout.write('input: x y (enter) (*quit: q) : ');
 
 
 let args = [],x=-1,y=-1;
-let mode = 'd';
+let inputMode = 'dig';
+
+ms.draw();
+process.stdout.write(`[mode:${inputMode}] x y (enter) (*empty : dig<=>flag)(*q : quit) : `);
+
 reader.on('line', (line) => {
+  line = line.trim();
+  if(line.length==0){
+    inputMode = inputMode=='dig'?'flag':'dig';
+    process.stdout.write(`[mode:${inputMode}] x y (enter) (*empty : dig<=>flag)(*q : quit) : `);
+    return;
+  }
   args = line.split(/[\s\t\r\n]/);
+  
   // console.log(line,args);
   if(args[0]=='q'){
+    ms.end();
     console.log('Bye~');
     reader.close();
     return;
@@ -50,12 +69,11 @@ reader.on('line', (line) => {
     console.log('Input value is not number.');
     return;
   }
-
-  if(ms.digXy(x,y)){
+  if( (inputMode=='dig' && ms.digXy(x,y) ) || (inputMode=='flag' && ms.flagXy(x,y)) ){
     ms.draw();
-    process.stdout.write('input: x y (enter) (*quit: q) : ');
+    process.stdout.write(`[mode:${inputMode}] x y (enter) (*empty : dig<=>flag)(*q : quit) : `);
   }else{
-    ms.draw();
+    ms.end(true);
     if(ms.endding==1){
       console.log('CLEAR!');
     }else if(ms.endding==2){

@@ -13,7 +13,7 @@ mb.setBoard(6,6,0);
 let msb = new MineSearchBoard();
 // console.log(msb);
 msb.debug = true
-msb.setBoard(10,10);
+msb.setBoard(3,3);
 msb.plantMine(0,1);
 msb.printBoard();
 
