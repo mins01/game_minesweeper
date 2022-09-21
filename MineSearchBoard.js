@@ -110,7 +110,7 @@ class MineSearchBoard extends Board{
             let defIdx = i;
             let chunk = ['['+'y'+Math.floor(i/this.boardWidth)+']'];
             chunk = chunk.concat(this.board.slice(i, i + chunkSize).map((v,k)=>{
-                return (v.mine===0?'-':'M')+':'+(v.flag===0?'-':v.flag)+':'+(v.value==-1?'-':v.value)+':'+(v.cover==-1?'-':v.cover);
+                return (v.mine===0?'-':'M')+':'+(v.flag===0?'-':v.flag)+':'+(v.value==-1?'-':(v.value==-2?'X':v.value))+':'+(v.cover==-1?'-':v.cover);
             }));
             // chunk = chunk.concat(this.board.slice(i, i + chunkSize));
             arrs.push(chunk.join('\t'));
