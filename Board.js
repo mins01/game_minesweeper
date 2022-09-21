@@ -3,6 +3,7 @@ class Board{
         this.debug = false;
         this.boardWidth = 0;
         this.boardHeight = 0;
+        this.maxIdx = 0;
         this.board = [];
 
         // this.debugBoard_1 = 'V';
@@ -13,18 +14,26 @@ class Board{
     setBoard(w,h,v){
         if(v===undefined){v = 0}
         this.board = [];
-        for(var i=0,m=h;i<m;i++){
-            this.board = this.board.concat((new Array(w)).fill(0));
+        // for(var i=0,m=h;i<m;i++){
+        //     this.board = this.board.concat((new Array(w)).fill(v));
+        // }
+        for(var i=0,m=w*h;i<m;i++){
+            this.board.push(v);
         }
         this.boardWidth = w;
         this.boardHeight = h;
+        this.maxIdx = this.board.length - 1;
         this.printDebug('setBoard',Array.from(arguments).join(','))
     }
-    // 지정위치 지뢰 매설(1개)
-    setValue(x,y,v){
+    // 지정위치 값 표시
+    setValueXy(x,y,v){
+        this.printDebug('setValueXy',Array.from(arguments).join(','))
+        if(v == undefined){v = 1;}
+        return this.setValue(this.xyToIdx(x,y),v);
+    }
+    setValue(idx,v){
         this.printDebug('setValue',Array.from(arguments).join(','))
         if(v == undefined){v = 1;}
-        let idx = this.boardWidth*y+x;
         if(idx+1 > this.board.length){
             console.error(`${x},${y}는 board의 범위를 벗어납니다.`);
             return false;
@@ -57,6 +66,47 @@ class Board{
         console.log(t2)
         console.log(arrs.join('\n'));
         console.log(t2)
+    }
+    xyToIdx(x,y){
+        return this.boardWidth*y+x;
+    }
+
+    // 9면
+    aroundIdxes(idx,containSelf){
+        // let idx = this.xyToIdx(x,y);
+        let idxes = [];
+        let nIdx = 0;
+        nIdx = idx-this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx-this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx-this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx-0-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        if(containSelf){ 
+            nIdx = idx-0; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx); //자기자신 
+        }
+        nIdx = idx-0+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx+this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx+this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx+this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        return idxes;
+    }
+
+    // 상하좌우 4면
+    crossedIdxes(idx,containSelf){
+        // let idx = this.xyToIdx(x,y);
+        let idxes = [];
+        let nIdx = 0;
+        // nIdx = idx-this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx-this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx-this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx-0-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        if(containSelf){ 
+            nIdx = idx-0; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx); //자기자신 
+        }
+        nIdx = idx-0+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx+this.boardWidth-1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        nIdx = idx+this.boardWidth; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        // nIdx = idx+this.boardWidth+1; if(nIdx >= 0 && nIdx <= this.maxIdx) idxes.push(nIdx);
+        return idxes;
     }
 }
 
