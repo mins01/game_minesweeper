@@ -1,4 +1,4 @@
-class Minesweeper{
+class MineBoard{
     constructor() {
         this.debug = false;
         this.boardWidth = 0;
@@ -37,10 +37,12 @@ class Minesweeper{
         this.printDebug('plantRandomMines:selected',r)
         r.forEach((v)=>{this.board[v]=1})
     }
+    // 디버그 출력제어용
     printDebug(...args){
         if(!this.debug) return;
         console.log('@printDebug',args)
     }
+    // 디버깅용 보드 내용 출력
     printBoard(){
         let arrs = [];
         var t = (new Array(this.boardWidth+1)).fill(0).map((v,idx) => { return 'x'+(idx-1); })
@@ -63,5 +65,5 @@ class Minesweeper{
 }
 
 if(module && module.exports){
-    module.exports = Minesweeper;
+    module.exports = MineBoard;
 }

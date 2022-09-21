@@ -1,7 +1,7 @@
-const Minesweeper = require("./Minesweeper");
-// require("Minesweeper.js")
+const Mineboard = require("./MineBoard");
+// require("Mineboard.js")
 
-let ms = new Minesweeper();
+let ms = new Mineboard();
 ms.debug = true
 ms.setBoard(6,6);
 
