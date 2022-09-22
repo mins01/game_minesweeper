@@ -137,7 +137,7 @@ class MineSearchBoard extends Board{
             this.board[idx].dig = 1;
             r = 1; //폭탄 없음
         }
-        if(!noChain){
+        if(!noChain && r !== 2){
             idxes.forEach((v,k)=>{
                 // console.log(v,this.board[v],this.countAroundedMines(v))
                 if(this.board[v].dig == 0){
