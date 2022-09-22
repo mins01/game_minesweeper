@@ -28,7 +28,7 @@ class MineSearchBoard extends Board{
     // flag 수
     get countFlag(){
         let count = 0;
-        this.board.forEach((v,k)=>{if(v.flag!==0) count++ })
+        this.board.forEach((v,k)=>{if(v.dig===0 && v.flag!==0) count++ })
         return count;
     }
     // dig 수
@@ -43,7 +43,11 @@ class MineSearchBoard extends Board{
         this.board.forEach((v,k)=>{if(v.dig===2) count++ })
         return count;
     }
-
+    // 총 지역 수
+    get countArea(){
+        return this.board.length
+    }
+    
     setBoard(w,h){
         w = parseInt(w);
         h = parseInt(h);

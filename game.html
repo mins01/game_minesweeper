@@ -51,7 +51,6 @@
 	<div class="container">
 		<h1 class="text-center">지뢰찾기</h1>
 		<div>
-			<h2>Game Setting</h2>
 			<form name="form_game_init" class="form-inline justify-content-center" action="" onsubmit="if(!ms){return false;}else{ms.init(this.w.value,this.h.value,this.lvl.value);ms.start()};return false;">
 				<div class="form-group mx-3">
 					<label>Width</label>
@@ -68,12 +67,40 @@
 				<button class="btn btn-info mx-3">Start</button>
 			</form>
 			<hr>
+			<div class="ms-status-wrap">
+				<h3 class="text-center">
+					<label class="ms-status badge badge-lg badge-info"><span class="label">Act</span><span class="numberAction">0</span></label>
+					<label class="ms-status badge badge-lg badge-success">
+						<span class="label">Flaged</span><span class="countFlag">0</span> 
+						/ 
+						<span class="label">Mine</span><span class="countMine">0</span>
+					</label>
+					<!-- <label class="ms-status badge badge-lg badge-info"><span class="label">Flaged Mine</span><span class="countFlagedMine">0</span></label> -->
+					<!-- <label class="ms-status badge badge-lg badge-info"><span class="label">Boom</span><span class="countBoom">0</span></label> -->
+					<label class="ms-status badge badge-lg badge-warning">
+						<span class="label">Diged</span><span class="countDig">0</span>
+						/
+						<span class="label">Area</span><span class="countArea">0</span>
+					</label>
+				</h3>
+			</div>
+			<hr>
+			<div class="ms-tool-wrap">
+				<form name="form_tool">
+					<h3 class="text-center">
+						<label class="m-0 btn btn-warning"><input type="radio" name="ms_tool" value="dig" checked>⛏️</label>
+						<label class="m-0 btn btn-success"><input type="radio" name="ms_tool" value="flag">🚩</label>
+						<button type="button" class="m-0 btn btn-danger" onclick="document.querySelector('#gameApp').dataset.cheat=document.querySelector('#gameApp').dataset.cheat=='on'?'off':'on'">Cheat:Radar</button>
+					</h3>
+				</form>
+			</div>
+			<hr>
 			<template id="template_ms_item">
 				<div class="ms-item" data-idx="0" data-dig="" data-cover="" data-flag="" data-mine="">
-					<div class="ms-item-box"></div>
+					<!-- <div class="ms-item-box"></div> -->
 				</div>
 			</template>
-			<div id="gameApp" class="ms-container">
+			<div id="gameApp" class="ms-container" data-cheat="off">
 				<div class="ms-board">
 					<div class="ms-item" data-idx="0">
 						<div class="ms-item-box"></div>

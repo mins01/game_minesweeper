@@ -10,9 +10,11 @@ class Minesweeper{
         // this.maxIdx = 0;
         this.playing = false;
         this.endding = 0; //0:엔딩없음,1:전부 찾음,2:폭발!        
-        this.numberDig = 0; //클릭 수
+        this.numberAction = 0; //클릭 수
         this.startDate = null;
         this.endDate = null;
+
+        this.lastIdx = -1;
 
         this.confNumberMine = 0;
         this.confLevel = 0;
@@ -25,7 +27,7 @@ class Minesweeper{
 
     init(w,h,lvl){
         this.msb.setBoard(w,h)
-        console.log(this.msb);
+        // console.log(this.msb);
         this.confLevel = lvl;
         let blen = this.msb.board.length
 
@@ -45,13 +47,22 @@ class Minesweeper{
         this.msb.plantRandomMines(this.confNumberMine);
         this.msb.reset();
         this.playing = true;
-        this.numberDig = 0;
+        this.numberAction = 0;
+        this.endding = 0;
+        this.lastIdx = -1;
         this.startDate = null;
         this.fnStart(this);
-        this.draw();
+        this.drawOrEnd();
     }
     draw(){
         this.fnDraw(this);
+    }
+    drawOrEnd(){
+        if(this.isEnd()!==0){
+            this.end();
+        }else{
+            this.draw();
+        }
     }
     end(){
         this.endDate = new Date();
@@ -114,7 +125,7 @@ class Minesweeper{
         var t = '#'+'='.repeat(this.width*8)+'#';
         console.log(t)
         console.log('|'+' '.repeat(Math.floor((t.length-12)/2))+'printBoard'+' '.repeat(Math.floor((t.length-12)/2))+'|')
-        console.log('| Dig:'+this.numberDig);
+        console.log('| Dig:'+this.numberAction);
         console.log('| Diged:'+this.msb.countDig + ' / Flaged:'+this.msb.countFlag + ' / Mine:' + this.msb.countMine  + ' / FlagedMine:' + this.msb.countFlagedMine + ' / Boom!:' + this.msb.countBoom + ' / Area:' + this.msb.board.length);
 
         var t2 = '#'+'-'.repeat(this.width*8)+'#';
@@ -130,12 +141,15 @@ class Minesweeper{
         }
     }
     flagXy(x,y){
+        return this.flag(this.msb.xyToIdx(x,y));
+    }
+    flag(idx){
         if(!this.playing){
             console.log('Game ended');
             return false;
         }
         
-        let r = this.msb.flagXy(x,y,this.msb.board[this.msb.xyToIdx(x,y)].flag===0?1:0);
+        let r = this.msb.flag(idx,(this.msb.board[idx].flag+1)%3);
         if(r === false){
             console.log('잘못된 좌표입니다.')
             // this.draw();
@@ -152,7 +166,7 @@ class Minesweeper{
         return true;
     }
     digXy(x,y){
-        this.dig(this.msb.xyToIdx(x,y));
+        return this.dig(this.msb.xyToIdx(x,y));
     }
     dig(idx){
         if(!this.playing){
@@ -160,12 +174,12 @@ class Minesweeper{
             return false;
         }
         //-- 최초 동작 시 시간 기록
-        if(this.numberDig===0){
+        if(this.numberAction===0){
             this.startDate = new Date();
         }
         //-- 최초 동작 시 폭탄이 있다면 폭탄을 재배치 한다.
         let limitResetMine = 100;
-        while(this.numberDig===0 && this.msb.board[idx].mine !== 0 && limitResetMine-- >= 0){
+        while(this.numberAction===0 && this.msb.board[idx].mine !== 0 && limitResetMine-- >= 0){
             this.msb.printDebug('최초 동작시 폭탄 선택 => 재배치함')
             this.msb.reset(true);
             this.msb.plantRandomMines(this.confNumberMine);
@@ -173,6 +187,7 @@ class Minesweeper{
         }
         
         let r = this.msb.dig(idx);
+        
         if(r === false){
             console.log('잘못된 좌표입니다.')
             // this.draw();
@@ -183,7 +198,8 @@ class Minesweeper{
             // this.draw();
             return true;
         }
-        this.numberDig++;
+        this.lastIdx = idx;
+        this.numberAction++;
         if(r == 2){
             this.playing = false;
             this.endding = 2;
