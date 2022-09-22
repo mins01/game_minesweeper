@@ -14,8 +14,8 @@ class MineBoard extends Board{
     }
     
     // 지정위치 지뢰 매설(1개)
-    plantMine(x,y,v){
-        this.printDebug('plantMine',Array.from(arguments))
+    plantMineXy(x,y,v){
+        this.printDebug('plantMineXy',Array.from(arguments))
         if(v == undefined){v = 1;}
         this.setValue(this.xyToIdx(x,y),v)
     }

@@ -13,33 +13,6 @@ class MineSearchBoard extends Board{
         // this.mineBoard = null;
     }
 
-    setBoard(w,h){
-        this.board = [];
-        for(var i=0,m=w*h;i<m;i++){
-            this.board.push(
-                {
-                    'dig':0, //0:befoer dig, 1:after dig, 2: boom!
-                    'cover':-1, //hint number
-                    'flag':0, //0:no flag, 1:flag
-                    'mine':0 //0:normal, 1:mine!
-                }
-                );
-        }
-        this.boardWidth = w;
-        this.boardHeight = h;
-        this.maxIdx = this.board.length - 1;
-        this.printDebug('setBoard',Array.from(arguments).join(','))
-    }
-    reset(withMine){
-        this.board.forEach((v,k)=>{
-            v.dig=0;
-            v.cover=-1;
-            v.flag=0;
-            if(withMine){
-                v.mine=0;
-            }
-        })
-    }
     // mine에 flag가 표시된 수
     get countFlagedMine(){
         let count = 0;
@@ -70,11 +43,46 @@ class MineSearchBoard extends Board{
         this.board.forEach((v,k)=>{if(v.dig===2) count++ })
         return count;
     }
+
+    setBoard(w,h){
+        this.board = [];
+        for(var i=0,m=w*h;i<m;i++){
+            this.board.push(
+                {
+                    'dig':0, //0:befoer dig, 1:after dig, 2: boom!
+                    'cover':-1, //hint number
+                    'flag':0, //0:no flag, 1:flag
+                    'mine':0 //0:normal, 1:mine!
+                }
+                );
+        }
+        this.boardWidth = w;
+        this.boardHeight = h;
+        this.maxIdx = this.board.length - 1;
+        this.printDebug('setBoard',Array.from(arguments).join(','))
+    }
+    reset(withMine){
+        this.board.forEach((v,k)=>{
+            v.dig=0;
+            v.cover=-1;
+            v.flag=0;
+            if(withMine){
+                v.mine=0;
+            }
+        })
+        this.fillHint();
+    }
+    
     // 지정위치 지뢰 매설(1개)
-    plantMine(x,y,v){
+    plantMineXy(x,y,v){
+        // this.printDebug('plantMineXy',Array.from(arguments))
+        if(v == undefined){v = 1;}
+        this.plantMine(this.xyToIdx(x,y),v)
+    }
+    plantMine(idx,v){
         this.printDebug('plantMine',Array.from(arguments))
         if(v == undefined){v = 1;}
-        this.board[this.xyToIdx(x,y)].mine=v;
+        this.board[idx].mine=v;
     }
     // 래덤으로 지뢰 매설(n개)
     plantRandomMines(n){
@@ -83,7 +91,15 @@ class MineSearchBoard extends Board{
         t.sort((a,b)=>{ return Math.random() - 0.5})
         let r = t.splice(0,n);
         this.printDebug('plantRandomMines:selected',r)
-        r.forEach((v)=>{this.board[v].mine=1})
+        r.forEach((v,k)=>{
+            this.plantMine(v,1)
+        })
+    }
+    fillHint(){
+        this.printDebug('fillHint',Array.from(arguments))
+        this.board.forEach((v,k)=>{
+            v.cover = this.countAroundedMines(k);
+        })
     }
 
     flagXy(x,y,v){
@@ -107,7 +123,7 @@ class MineSearchBoard extends Board{
         this.printDebug('digXy',Array.from(arguments).join(','));
         return this.dig(this.xyToIdx(x,y));
     }
-    dig(idx){
+    dig(idx,noChain){
         
         let idxes = this.aroundedIdxes(idx,true);
         let nIdxes = []; //다음으로 열 위치
@@ -121,20 +137,23 @@ class MineSearchBoard extends Board{
             this.board[idx].dig = 1;
             r = 1; //폭탄 없음
         }
-
-        idxes.forEach((v,k)=>{
-            // console.log(v,this.board[v],this.countAroundedMines(v))
-            if(this.board[v].dig == 0){
-                this.board[v].cover = this.countAroundedMines(v)
-                if(this.board[v].mine===0 && this.board[v].cover===0){
-                    nIdxes.push(v);
+        if(!noChain){
+            idxes.forEach((v,k)=>{
+                // console.log(v,this.board[v],this.countAroundedMines(v))
+                if(this.board[v].dig == 0){
+                    // this.board[v].cover = this.countAroundedMines(v)
+                    // if(this.board[v].mine===0 && this.board[v].cover===0){
+                    if(this.board[v].mine===0 ){
+                        nIdxes.push({idx:v,noChain:(this.board[v].cover!==0)});
+                    }
                 }
-            }
-        });
+            });
+        }
+        
         nIdxes.forEach((v,k)=>{
-            if(this.board[v].dig!==0) return;
-            this.printDebug('dig:auto',v,this.idxToXy(v));
-            this.dig(v);
+            if(this.board[v.idx].dig!==0) return;
+            this.printDebug('dig:auto',v.idx,this.idxToXy(v.idx));
+            this.dig(v.idx,v.noChain);
         })
 
         return r; 

@@ -48,7 +48,7 @@ class Minesweeper{
     }
 
     printBoard(ended){
-        // this.msb.printBoard()
+        // this.msb.printBoard() //해답 맵 출력
         let arrs = [];
         let board = this.msb.board;
         var t = (new Array(this.boardWidth+1)).fill(0).map((v,idx) => { return '[x'+(idx-1)+']'; })
@@ -73,18 +73,19 @@ class Minesweeper{
                     if(v.dig == 2){//boom!
                         return 'X';
                     }else if(v.dig == 1){// after dig
-                        return '-';
-                    }else{ //before dig
-                        if(v.flag != 0){ 
-                            return 'F';
-                        }else if(v.cover == 0){
-                            // return '?';
-                            return v.cover;
+                        if(v.cover == 0){
+                            return '-';
+                            // return v.cover;
                         }else if(v.cover != -1){
                             return v.cover;
                         }else{
-                            return '?';
+                            return '-';
                         }
+                    }else{ //before dig
+                        if(v.flag != 0){ 
+                            return 'F';
+                        }
+                        return '?';
                     }
                 }
                 

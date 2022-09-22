@@ -20,11 +20,14 @@ import Minesweeper from "./Minesweeper.js";
 let ms = new Minesweeper();
 ms.debug = true
 ms.msb.debug = true; 
-ms.setBoard(3,3,0);
-ms.msb.plantMine(0,1);
-ms.msb.plantMine(1,1);
-ms.msb.plantMine(2,1);
-// ms.msb.plantRandomMines(1);
+
+// ms.setBoard(3,3,0);
+// ms.msb.plantMineXy(0,1);
+// ms.msb.plantMineXy(1,1);
+// ms.msb.plantMineXy(2,1);
+
+ms.setBoard(4,4,0);
+ms.msb.plantRandomMines(4);
 ms.start();
 
 
