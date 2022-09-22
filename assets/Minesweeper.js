@@ -111,6 +111,8 @@ class Minesweeper{
                         }
                     }else{ //before dig
                         if(v.flag != 0){ 
+                            if(v.flag==1) return 'F';
+                            if(v.flag==2) return 'f';
                             return 'F';
                         }
                         return '?';
