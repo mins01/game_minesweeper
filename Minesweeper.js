@@ -5,9 +5,9 @@ class Minesweeper{
     constructor() {
         this.debug = false;
         this.msb = new MineSearchBoard();
-        this.width = 0;
-        this.height = 0;
-        this.maxIdx = 0;
+        // this.width = 0;
+        // this.height = 0;
+        // this.maxIdx = 0;
         this.playing = false;
         this.endding = 0; //0:엔딩없음,1:전부 찾음,2:폭발!        
         this.numberDig = 0; //클릭 수
@@ -15,11 +15,30 @@ class Minesweeper{
         this.endDate = null;
 
         this.confNumberMine = 0;
+        this.confLevel = 0;
 
-        this.fnStart = (thisC)=>{}
-        this.fnDraw = (thisC)=>{thisC.printBoard()}
-        this.fnEnd = (thisC)=>{thisC.printBoard(true)}
+        this.fnInit = (thisC)=>{} //보드 기본 세팅 후 호출
+        this.fnStart = (thisC)=>{} //게임 시작시 호출
+        this.fnDraw = (thisC)=>{thisC.printBoard()} //화면 그릴 때 호출
+        this.fnEnd = (thisC)=>{thisC.printBoard(true)} //게임 완료시 호출
     }
+
+    init(w,h,m){
+        this.msb.setBoard(w,h)
+        this.confLevel = m;
+        let blen = this.msb.board.length
+        if(this.confLevel==1) this.confNumberMine = Math.ceil(blen * 0.123);
+        else if(this.confLevel==2) this.confNumberMine = Math.ceil(blen * 0.156);
+        else if(this.confLevel==3) this.confNumberMine = Math.ceil(blen * 0.226);
+        else this.confNumberMine = Math.ceil(blen * 0.123);
+        
+        this.fnInit();
+    }
+    get width(){ return this.msb.width;  }
+    get height(){ return this.msb.height;  }
+    get maxIdx(){ return this.msb.maxIdx;  }
+
+
     start(){
         this.msb.plantRandomMines(this.confNumberMine);
         this.msb.reset();
@@ -38,24 +57,9 @@ class Minesweeper{
         this.fnEnd(this);
     }
     isEnd(){
-        if(this.msb.countBoom>0){
-            return 2; //폭발 엔딩
-        }
-        if(this.msb.countFlagedMine === this.msb.countMine && this.msb.countFlagedMine === this.msb.countFlag){
-            return 1; //전부 찾음
-        }
-        if(this.msb.board.length - this.msb.countDig === this.msb.countMine){
-            return 1; //전부 찾음
-        }
-        return 0;
+        return this.msb.isEnd();
     }
 
-    setBoard(w,h){
-        this.msb.setBoard(w,h)
-        this.width = this.msb.width;
-        this.height = this.msb.height;
-        this.maxIdx = this.msb.maxIdx;
-    }
 
     printBoard(ended){
         // this.msb.printBoard() //해답 맵 출력

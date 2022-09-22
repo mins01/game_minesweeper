@@ -181,6 +181,18 @@ class MineSearchBoard extends Board{
         return count;
     }
 
+    isEnd(){
+        if(this.countBoom>0){
+            return 2; //폭발 엔딩
+        }
+        if(this.countFlagedMine === this.countMine && this.countFlagedMine === this.countFlag){
+            return 1; //전부 찾음
+        }
+        if(this.board.length - this.countDig === this.countMine){
+            return 1; //전부 찾음
+        }
+        return 0; //게임중
+    }
 
     // 디버깅용 보드 내용 출력
     printBoard(){

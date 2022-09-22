@@ -22,14 +22,14 @@ let ms = new Minesweeper();
 // ms.msb.debug = true; 
 ms.debug = false;
 ms.msb.debug = false;
- 
+
 
 // ms.setBoard(3,3,0);
 // ms.msb.plantMineXy(0,1);
 // ms.msb.plantMineXy(1,1);
 // ms.msb.plantMineXy(2,1);
 
-let width = 0,height=0,confNumberMine=0;
+let width = 0,height=0,confLevel=0;
 
 let args = [],x=-1,y=-1;
 let inputMode = 'dig';
@@ -55,18 +55,17 @@ reader.on('line', (line) => {
     if(isNaN(height) || height<=0){
       process.stdout.write('board height : ');
     }else{
-      process.stdout.write('number of mine : ');
+      process.stdout.write('level (1~3) : ');
     }
     return;
   }
-  if(isNaN(confNumberMine) || confNumberMine<=0){
-    confNumberMine = parseInt(line);
-    if(isNaN(confNumberMine) || confNumberMine<=0){
-      process.stdout.write('number of mine : ');
+  if(isNaN(confLevel) || confLevel<=0){
+    confLevel = parseInt(line);
+    if(isNaN(confLevel) || confLevel<=0){
+      process.stdout.write('level (1~3) : ');
     }else{
       if(!ms.playing){
-        ms.setBoard(width,height,0);
-        ms.confNumberMine = confNumberMine;
+        ms.init(width,height,confLevel);
         ms.start();
         ms.draw();
       }
