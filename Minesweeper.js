@@ -23,16 +23,18 @@ class Minesweeper{
         this.fnEnd = (thisC)=>{thisC.printBoard(true)} //게임 완료시 호출
     }
 
-    init(w,h,m){
+    init(w,h,lvl){
         this.msb.setBoard(w,h)
-        this.confLevel = m;
+        console.log(this.msb);
+        this.confLevel = lvl;
         let blen = this.msb.board.length
+
         if(this.confLevel==1) this.confNumberMine = Math.ceil(blen * 0.123);
         else if(this.confLevel==2) this.confNumberMine = Math.ceil(blen * 0.156);
         else if(this.confLevel==3) this.confNumberMine = Math.ceil(blen * 0.226);
         else this.confNumberMine = Math.ceil(blen * 0.123);
         
-        this.fnInit();
+        this.fnInit(this);
     }
     get width(){ return this.msb.width;  }
     get height(){ return this.msb.height;  }
@@ -46,6 +48,7 @@ class Minesweeper{
         this.numberDig = 0;
         this.startDate = null;
         this.fnStart(this);
+        this.draw();
     }
     draw(){
         this.fnDraw(this);
@@ -149,6 +152,9 @@ class Minesweeper{
         return true;
     }
     digXy(x,y){
+        this.dig(this.msb.xyToIdx(x,y));
+    }
+    dig(idx){
         if(!this.playing){
             console.log('Game ended');
             return false;
@@ -159,14 +165,14 @@ class Minesweeper{
         }
         //-- 최초 동작 시 폭탄이 있다면 폭탄을 재배치 한다.
         let limitResetMine = 100;
-        while(this.numberDig===0 && this.msb.board[this.msb.xyToIdx(x,y)].mine !== 0 && limitResetMine-- >= 0){
+        while(this.numberDig===0 && this.msb.board[idx].mine !== 0 && limitResetMine-- >= 0){
             this.msb.printDebug('최초 동작시 폭탄 선택 => 재배치함')
             this.msb.reset(true);
             this.msb.plantRandomMines(this.confNumberMine);
             this.msb.reset();
         }
         
-        let r = this.msb.digXy(x,y);
+        let r = this.msb.dig(idx);
         if(r === false){
             console.log('잘못된 좌표입니다.')
             // this.draw();

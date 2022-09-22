@@ -45,6 +45,8 @@ class MineSearchBoard extends Board{
     }
 
     setBoard(w,h){
+        w = parseInt(w);
+        h = parseInt(h);
         this.board = [];
         for(var i=0,m=w*h;i<m;i++){
             this.board.push(
