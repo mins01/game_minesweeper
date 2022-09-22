@@ -5,27 +5,37 @@ class Minesweeper{
     constructor() {
         this.debug = false;
         this.msb = new MineSearchBoard();
-        this.boardWidth = 0;
-        this.boardHeight = 0;
+        this.width = 0;
+        this.height = 0;
         this.maxIdx = 0;
         this.playing = false;
-        this.endding = 0; //0:엔딩없음,1:전부 찾음,2:폭발!
-        this.fnDraw = ()=>{this.printBoard()}
-        this.fnEnd = ()=>{this.printBoard(true)}
-        this.countDig = 0;
+        this.endding = 0; //0:엔딩없음,1:전부 찾음,2:폭발!        
+        this.numberDig = 0; //클릭 수
+        this.startDate = null;
+        this.endDate = null;
+
+        this.confNumberMine = 0;
+
+        this.fnStart = (thisC)=>{}
+        this.fnDraw = (thisC)=>{thisC.printBoard()}
+        this.fnEnd = (thisC)=>{thisC.printBoard(true)}
     }
     start(){
+        this.msb.plantRandomMines(this.confNumberMine);
         this.msb.reset();
         this.playing = true;
-        this.countDig = 0;
+        this.numberDig = 0;
+        this.startDate = new Date();
+        this.fnStart(this);
     }
     draw(){
-        this.fnDraw();
+        this.fnDraw(this);
     }
     end(){
+        this.endDate = new Date();
         this.playing=false;
         this.endding=this.isEnd();
-        this.fnEnd();
+        this.fnEnd(this);
     }
     isEnd(){
         if(this.msb.countBoom>0){
@@ -42,8 +52,8 @@ class Minesweeper{
 
     setBoard(w,h){
         this.msb.setBoard(w,h)
-        this.boardWidth = this.msb.boardWidth;
-        this.boardHeight = this.msb.boardHeight;
+        this.width = this.msb.width;
+        this.height = this.msb.height;
         this.maxIdx = this.msb.maxIdx;
     }
 
@@ -51,12 +61,12 @@ class Minesweeper{
         // this.msb.printBoard() //해답 맵 출력
         let arrs = [];
         let board = this.msb.board;
-        var t = (new Array(this.boardWidth+1)).fill(0).map((v,idx) => { return '[x'+(idx-1)+']'; })
+        var t = (new Array(this.width+1)).fill(0).map((v,idx) => { return '[x'+(idx-1)+']'; })
         t[0] = '[y⧵x]';
         arrs.push(t.join('\t'));
-        let chunkSize = this.boardWidth;
+        let chunkSize = this.width;
         for (let i = 0,m= board.length; i < m; i += chunkSize) {
-            let chunk = ['['+'y'+Math.floor(i/this.boardWidth)+']'];
+            let chunk = ['['+'y'+Math.floor(i/this.width)+']'];
             chunk = chunk.concat(board.slice(i, i + chunkSize).map((v,k)=>{
                 if(ended){ //엔딩결과
                     if(v.flag!=0 && v.mine != 0){ 
@@ -94,13 +104,13 @@ class Minesweeper{
             // chunk = chunk.concat(board.slice(i, i + chunkSize));
             arrs.push(chunk.join('\t'));
         }
-        var t = '#'+'='.repeat(this.boardWidth*8)+'#';
+        var t = '#'+'='.repeat(this.width*8)+'#';
         console.log(t)
         console.log('|'+' '.repeat(Math.floor((t.length-12)/2))+'printBoard'+' '.repeat(Math.floor((t.length-12)/2))+'|')
-        console.log('| Dig:'+this.countDig);
+        console.log('| Dig:'+this.numberDig);
         console.log('| Diged:'+this.msb.countDig + ' / Flaged:'+this.msb.countFlag + ' / Mine:' + this.msb.countMine  + ' / FlagedMine:' + this.msb.countFlagedMine + ' / Boom!:' + this.msb.countBoom + ' / Area:' + this.msb.board.length);
 
-        var t2 = '#'+'-'.repeat(this.boardWidth*8)+'#';
+        var t2 = '#'+'-'.repeat(this.width*8)+'#';
         console.log(t2)
         console.log(arrs.join('\n'));
         console.log(t2)
@@ -132,6 +142,14 @@ class Minesweeper{
             console.log('Game ended');
             return false;
         }
+        //-- 최초 클릭시 폭탄이 있다면 폭탄을 재배치 한다.
+        let limitResetMine = 100;
+        while(this.numberDig===0 && this.msb.board[this.msb.xyToIdx(x,y)].mine !== 0 && limitResetMine-- >= 0){
+            this.msb.printDebug('최초 동작시 폭탄 선택 => 재배치함')
+            this.msb.reset(true);
+            this.msb.plantRandomMines(this.confNumberMine);
+            this.msb.reset();
+        }
         
         let r = this.msb.digXy(x,y);
         if(r === false){
@@ -144,7 +162,7 @@ class Minesweeper{
             // this.draw();
             return true;
         }
-        this.countDig++;
+        this.numberDig++;
         if(r == 2){
             this.playing = false;
             this.endding = 2;

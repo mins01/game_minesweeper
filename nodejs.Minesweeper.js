@@ -18,40 +18,63 @@ import Minesweeper from "./Minesweeper.js";
 
 
 let ms = new Minesweeper();
-ms.debug = true
-ms.msb.debug = true; 
+// ms.debug = true
+// ms.msb.debug = true; 
+ms.debug = false;
+ms.msb.debug = false;
+ 
 
 // ms.setBoard(3,3,0);
 // ms.msb.plantMineXy(0,1);
 // ms.msb.plantMineXy(1,1);
 // ms.msb.plantMineXy(2,1);
 
-ms.setBoard(4,4,0);
-ms.msb.plantRandomMines(4);
-ms.start();
-
-
-// ms.flagXy(0,1)?ms.draw():1;
-// ms.flagXy(1,1)?ms.draw():1;
-// ms.flagXy(2,1)?ms.draw():1;
-// ms.end()
-// process.exit()
-
-
-// ms.digXy(1,2);
-// ms.digXy(3,2);
-
-
-
+let width = 0,height=0,confNumberMine=0;
 
 let args = [],x=-1,y=-1;
 let inputMode = 'dig';
 
-ms.draw();
-process.stdout.write(`[mode:${inputMode}] x y (enter) (*empty : dig<=>flag)(*q : quit) : `);
+
+process.stdout.write('board width : ');
+
 
 reader.on('line', (line) => {
   line = line.trim();
+
+  if(isNaN(width) || width<=0){
+    width = parseInt(line);
+    if(isNaN(width) || width<=0){
+      process.stdout.write('board width : ');
+    }else{
+      process.stdout.write('board height : ');
+    }
+    return;
+  }
+  if(isNaN(height) || height<=0){
+    height = parseInt(line);
+    if(isNaN(height) || height<=0){
+      process.stdout.write('board height : ');
+    }else{
+      process.stdout.write('number of mine : ');
+    }
+    return;
+  }
+  if(isNaN(confNumberMine) || confNumberMine<=0){
+    confNumberMine = parseInt(line);
+    if(isNaN(confNumberMine) || confNumberMine<=0){
+      process.stdout.write('number of mine : ');
+    }else{
+      if(!ms.playing){
+        ms.setBoard(width,height,0);
+        ms.confNumberMine = confNumberMine;
+        ms.start();
+        ms.draw();
+      }
+      process.stdout.write(`[mode:${inputMode}] x y (enter) (*empty : dig<=>flag)(*q : quit) : `);
+    }
+    return;
+  }
+
   if(line.length==0){
     inputMode = inputMode=='dig'?'flag':'dig';
     process.stdout.write(`[mode:${inputMode}] x y (enter) (*empty : dig<=>flag)(*q : quit) : `);

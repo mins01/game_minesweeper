@@ -7,8 +7,8 @@ class MineSearchBoard extends Board{
     constructor() {
         super();
         this.debug = false;
-        this.boardWidth = 0;
-        this.boardHeight = 0;
+        this.width = 0;
+        this.height = 0;
         this.board = [];
         // this.mineBoard = null;
     }
@@ -56,8 +56,8 @@ class MineSearchBoard extends Board{
                 }
                 );
         }
-        this.boardWidth = w;
-        this.boardHeight = h;
+        this.width = w;
+        this.height = h;
         this.maxIdx = this.board.length - 1;
         this.printDebug('setBoard',Array.from(arguments).join(','))
     }
@@ -104,7 +104,7 @@ class MineSearchBoard extends Board{
 
     flagXy(x,y,v){
         if(v===undefined){v=1;}
-        if(x < 0 || y < 0 || x >= this.boardWidth || y >= this.boardHeight){
+        if(x < 0 || y < 0 || x >= this.width || y >= this.height){
             this.printDebug('flagXy',Array.from(arguments).join(','),false);
             return false;
         }
@@ -116,7 +116,7 @@ class MineSearchBoard extends Board{
         return true;
     }
     digXy(x,y){
-        if(x < 0 || y < 0 || x >= this.boardWidth || y >= this.boardHeight){
+        if(x < 0 || y < 0 || x >= this.width || y >= this.height){
             this.printDebug('digXy',Array.from(arguments).join(','),false);
             return false;
         }
@@ -185,25 +185,25 @@ class MineSearchBoard extends Board{
     // 디버깅용 보드 내용 출력
     printBoard(){
         let arrs = [];
-        var t = (new Array(this.boardWidth+1)).fill(0).map((v,idx) => { return '[x'+(idx-1)+']'; })
+        var t = (new Array(this.width+1)).fill(0).map((v,idx) => { return '[x'+(idx-1)+']'; })
         t[0] = '[y⧵x]';
         arrs.push(t.join('\t'));
-        let chunkSize = this.boardWidth;
+        let chunkSize = this.width;
         for (let i = 0,m= this.board.length; i < m; i += chunkSize) {
             let defIdx = i;
-            let chunk = ['['+'y'+Math.floor(i/this.boardWidth)+']'];
+            let chunk = ['['+'y'+Math.floor(i/this.width)+']'];
             chunk = chunk.concat(this.board.slice(i, i + chunkSize).map((v,k)=>{
                 return (v.mine===0?'-':'M')+':'+(v.flag===0?'-':v.flag)+':'+(v.dig==-1?'-':(v.dig==-2?'X':v.dig))+':'+(v.cover==-1?'-':v.cover);
             }));
             // chunk = chunk.concat(this.board.slice(i, i + chunkSize));
             arrs.push(chunk.join('\t'));
         }
-        var t = '#'+'='.repeat(this.boardWidth*8)+'#';
+        var t = '#'+'='.repeat(this.width*8)+'#';
         console.log(t)
         console.log('|'+' '.repeat(Math.floor((t.length-12)/2))+'printBoard'+' '.repeat(Math.floor((t.length-12)/2))+'|')
         console.log('| Diged:'+this.countDig + ' / Flaged:'+this.countFlag + ' / Mine:' + this.countMine  + ' / FlagedMine:' + this.countFlagedMine + ' / Boom!:' + this.countBoom + ' / Area:' + this.board.length);
         
-        var t2 = '#'+'-'.repeat(this.boardWidth*8)+'#';
+        var t2 = '#'+'-'.repeat(this.width*8)+'#';
         console.log(t2)
         console.log(arrs.join('\n'));
         console.log(t2)
