@@ -44,7 +44,7 @@ class Minesweeper{
         this.msb.reset();
         this.playing = true;
         this.numberDig = 0;
-        this.startDate = new Date();
+        this.startDate = null;
         this.fnStart(this);
     }
     draw(){
@@ -118,6 +118,13 @@ class Minesweeper{
         console.log(t2)
         console.log(arrs.join('\n'));
         console.log(t2)
+        if(ended){ //엔딩결과
+            if(this.startDate==null){
+                console.log('| Play time : 시작전');
+            }else{
+                console.log('| Play time : '+((this.endDate.getTime()-this.startDate.getTime())/1000).toFixed(2)+' sec');
+            }
+        }
     }
     flagXy(x,y){
         if(!this.playing){
@@ -146,7 +153,11 @@ class Minesweeper{
             console.log('Game ended');
             return false;
         }
-        //-- 최초 클릭시 폭탄이 있다면 폭탄을 재배치 한다.
+        //-- 최초 동작 시 시간 기록
+        if(this.numberDig===0){
+            this.startDate = new Date();
+        }
+        //-- 최초 동작 시 폭탄이 있다면 폭탄을 재배치 한다.
         let limitResetMine = 100;
         while(this.numberDig===0 && this.msb.board[this.msb.xyToIdx(x,y)].mine !== 0 && limitResetMine-- >= 0){
             this.msb.printDebug('최초 동작시 폭탄 선택 => 재배치함')
