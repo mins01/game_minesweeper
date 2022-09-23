@@ -5,6 +5,7 @@
 }
 
 .ms-container{
+    --position-gap:1px;
     --board-width:clamp(100px, 70vmin, 600px);
     /* --board-width:300px; */
     --grid-max-wh:3;
@@ -59,14 +60,14 @@
     border: 2px solid #999;
     /* width:var(--grid-item-box-width);height:var(--grid-item-box-width); */
     /* width:100%;height: 100%; */
-    border-radius: 50%;
+    border-radius: 20%;
     transition: background-color 0.2s linear;
     
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: var(--position-gap);
+    left: var(--position-gap);
+    right: var(--position-gap);
+    bottom: var(--position-gap);
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -80,8 +81,18 @@
 }
 
 
+.ms-item[data-cover="0"]::before{color: #000;}
+.ms-item[data-cover="1"]::before{color: #0099FF;}
+.ms-item[data-cover="2"]::before{color: #12AF30;}
+.ms-item[data-cover="3"]::before{color: red;}
+.ms-item[data-cover="4"]::before{color: #1020FF;}
+.ms-item[data-cover="5"]::before{color: #801900;}
+.ms-item[data-cover="6"]::before{color: #009E5F;}
+.ms-item[data-cover="7"]::before{color: #C500A0;}
+.ms-item[data-cover="8"]::before{color: #FF8900;}
 
 /* .ms-container[data-endding="0"] */
+
 .ms-item[data-dig="0"]::before{
     border: 0px dashed #999;
     background-color: #aaa;
@@ -99,9 +110,11 @@
 .ms-container[data-endding="2"] .ms-item::before {
     border: 1px dashed #abc;
     background-color: #fff;
-    color:#000;
     content: attr(data-cover);
 }
+
+
+
 .ms-item[data-dig="1"][data-cover="0"]::before,
 .ms-container[data-endding="1"] .ms-item[data-cover="0"]::before,
 .ms-container[data-endding="2"] .ms-item[data-cover="0"]::before {
@@ -112,7 +125,7 @@
 ENDDING
 */
 .ms-container[data-endding="1"] .ms-item[data-mine="1"]{
-    z-index: 10;
+    z-index: 20;
 }
 .ms-container[data-endding="1"] .ms-item[data-mine="1"]::before{
     border: 0px dashed rgb(255, 255, 255);
@@ -144,18 +157,18 @@ ENDDING
 .ms-container[data-endding="2"] .ms-item[data-flag="2"][data-mine="1"]::before{
     border: 1px dashed rgb(202, 104, 38);
     background-color: rgb(213, 250, 195);
-    content: "🏳️" !important;
+    /* content: "🏳️" !important; */
     /* content: "💤" !important; */
-    
-    animation-name:none;
-    /* transform-origin: center bottom;
+    content: "💣" !important;
+    /* animation-name:none; */
+
     animation-duration: 1s;
-    animation-name: ani-endding-flag;
-    animation-iteration-count: 10; */
+    animation-name: ani-endding-bomb;
+    animation-iteration-count: infinite;
 }
 /* Boom mine */
 .ms-container[data-endding="2"] .ms-item[data-dig="2"][data-mine="1"]{
-    z-index: 10;
+    z-index: 30;
 }
 .ms-container[data-endding="2"] .ms-item[data-dig="2"][data-mine="1"]::before{
     border: 1px dashed rgb(202, 38, 65);
@@ -196,13 +209,7 @@ ENDDING
     50%{transform:translateY(-10px)}
     to {transform:translateY(0px)}
 }
-@keyframes ani-endding-flag {
-    from {transform:rotate(0deg)}
-    25%{transform:rotate(-45deg)}
-    50%{transform:rotate(0)}
-    75%{transform:rotate(45deg)}
-    to {transform:rotate(0)}
-}
+
 @keyframes ani-endding-frower {
     from {transform:rotate(0deg)}
     25%{transform:rotate(-45deg)}
