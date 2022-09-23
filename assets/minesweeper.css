@@ -224,9 +224,9 @@ ENDDING
 
 @keyframes ani-endding-frower {
     from {transform:rotate(0deg)}
-    25%{transform:rotate(-45deg)}
+    25%{transform:rotate(-30deg)}
     50%{transform:rotate(0)}
-    75%{transform:rotate(45deg)}
+    75%{transform:rotate(30deg)}
     to {transform:rotate(0)}
 }
 
