@@ -52,24 +52,32 @@
 		<h1 class="text-center">지뢰찾기</h1>
 		<div>
 			<form name="form_game_init" class="form-inline justify-content-center" action="" onsubmit="if(!ms){return false;}else{ms.init(this.w.value,this.h.value,this.lvl.value);ms.start()};return false;">
-				<div class="form-group mx-3">
-					<label>Width</label>
-					<input class="form-control mx-1" type="number" name="w" value="9" min="6" max="30">
+
+
+				<div class="ms-input-group input-group input-group-sm m-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" >Width</span>
+					</div>
+					<input class="form-control " type="number" name="w" value="9" min="6" max="30">
 				</div>
-				<div class="form-group mx-3">
-					<label>Height</label>
-					<input class="form-control mx-1" type="number" name="h" value="9" min="6" max="30">
+				<div class="ms-input-group input-group input-group-sm m-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" >Height</span>
+					</div>
+					<input class="form-control " type="number" name="h" value="9" min="6" max="30">
 				</div>
-				<div class="form-group mx-3">
-					<label>Level</label>
-					<input class="form-control mx-1" type="number" name="lvl" value="1" min="1" max="3">
+				<div class="ms-input-group input-group input-group-sm m-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" >Level</span>
+					</div>
+					<input class="form-control " type="number" name="lvl" value="1" min="1" max="3">
 				</div>
-				<button class="btn btn-info mx-3">Start</button>
+				<button class="btn btn-info btn-sm " type="submit">Start</button>
 			</form>
-			<hr>
+			<hr class="my-1">
 			<div class="ms-status-wrap">
-				<h3 class="text-center">
-					<label class="ms-status badge badge-lg badge-info"><span class="label">Act</span><span class="numberAction">0</span></label>
+				<h4 class="text-center my-0">
+					<label class="ms-status badge badge-lg badge-info"><span class="label">Action</span><span class="numberAction">0</span></label>
 					<label class="ms-status badge badge-lg badge-success">
 						<span class="label">Flaged</span><span class="countFlag">0</span> 
 						/ 
@@ -82,9 +90,9 @@
 						/
 						<span class="label">Area</span><span class="countArea">0</span>
 					</label>
-				</h3>
+				</h4>
 			</div>
-			<hr>
+			<hr class="my-1">
 			<div class="ms-tool-wrap">
 				<form name="form_tool">
 					<h3 class="text-center">

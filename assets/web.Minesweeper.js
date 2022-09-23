@@ -21,10 +21,12 @@ ms.fnInit=(ms)=>{
 
   ms.msBoard.innerHTML = '';
   let template_ms_item = document.querySelector('#template_ms_item');
-  ms.msb.board.forEach((element) => {
+  let maxDelay = Math.max(2,ms.width%10-2)
+  ms.msb.board.forEach((element,idx) => {
     const clone = template_ms_item.content.cloneNode(true);
     const msItem = clone.querySelector('.ms-item');
-
+    msItem.dataset.idx = idx;
+    msItem.dataset.delay = idx % maxDelay;
     ms.msBoard.appendChild(clone);
   });
   
