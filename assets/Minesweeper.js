@@ -181,10 +181,10 @@ class Minesweeper{
         }
         //-- 최초 동작 시 폭탄이 있다면 폭탄을 재배치 한다.
         let limitResetMine = 100;
-        while(this.numberAction===0 && this.msb.board[idx].mine !== 0 && limitResetMine-- >= 0){
+        while(this.numberAction===0 && limitResetMine-- >= 0){
             this.msb.printDebug('최초 동작시 폭탄 선택 => 재배치함')
             this.msb.reset(true);
-            this.msb.plantRandomMines(this.confNumberMine);
+            this.msb.plantRandomMines(this.confNumberMine,this.msb.aroundedIdxes(idx,true));
             this.msb.reset();
         }
         

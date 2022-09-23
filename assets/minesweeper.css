@@ -1,8 +1,8 @@
 @charset "utf-8";
 
-.container{
-    /* min-width: 280px; */
-}
+/* .container{
+    min-width: 280px;
+} */
 
 .ms-container{
     --position-gap:1px;

@@ -91,9 +91,14 @@ class MineSearchBoard extends Board{
         this.board[idx].mine=v;
     }
     // 래덤으로 지뢰 매설(n개)
-    plantRandomMines(n){
+    plantRandomMines(n,excludes){
+        if(excludes===undefined){excludes = []}        
         this.printDebug('plantRandomMines',Array.from(arguments))
-        let t = this.board.map((v,idx)=>{return idx;})
+        let t = this.board.map((v,k)=>{
+            return k;
+        }).filter((v,k)=>{
+            return !excludes.includes(v); //exclides 에 포함된 건 제외함
+        })
         t.sort((a,b)=>{ return Math.random() - 0.5})
         let r = t.splice(0,n);
         this.printDebug('plantRandomMines:selected',r)
