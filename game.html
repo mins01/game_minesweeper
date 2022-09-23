@@ -77,15 +77,15 @@
 			<hr class="my-1">
 			<div class="ms-status-wrap">
 				<h4 class="text-center my-0">
-					<label class="ms-status badge badge-lg badge-info"><span class="label">Action</span><span class="numberAction">0</span></label>
-					<label class="ms-status badge badge-lg badge-success">
+					<label class="ms-status m-1 badge badge-lg badge-info"><span class="label">Action</span><span class="numberAction">0</span></label>
+					<label class="ms-status m-1 badge badge-lg badge-success">
 						<span class="label">Flaged</span><span class="countFlag">0</span> 
 						/ 
 						<span class="label">Mine</span><span class="countMine">0</span>
 					</label>
-					<!-- <label class="ms-status badge badge-lg badge-info"><span class="label">Flaged Mine</span><span class="countFlagedMine">0</span></label> -->
-					<!-- <label class="ms-status badge badge-lg badge-info"><span class="label">Boom</span><span class="countBoom">0</span></label> -->
-					<label class="ms-status badge badge-lg badge-warning">
+					<!-- <label class="ms-status m-1 badge badge-lg badge-info"><span class="label">Flaged Mine</span><span class="countFlagedMine">0</span></label> -->
+					<!-- <label class="ms-status m-1 badge badge-lg badge-info"><span class="label">Boom</span><span class="countBoom">0</span></label> -->
+					<label class="ms-status m-1 badge badge-lg badge-warning">
 						<span class="label">Diged</span><span class="countDig">0</span>
 						/
 						<span class="label">Area</span><span class="countArea">0</span>
@@ -95,14 +95,14 @@
 			<hr class="my-1">
 			<div class="ms-tool-wrap">
 				<form name="form_tool">
-					<h3 class="text-center">
+					<h3 class="text-center m-0 p-0">
 						<label class="m-0 btn btn-warning"><input type="radio" name="ms_tool" value="dig" checked>⛏️</label>
 						<label class="m-0 btn btn-success"><input type="radio" name="ms_tool" value="flag">🚩</label>
 						<button type="button" class="m-0 btn btn-danger" onclick="document.querySelector('#gameApp').dataset.cheat=document.querySelector('#gameApp').dataset.cheat=='on'?'off':'on'">Cheat:Radar</button>
 					</h3>
 				</form>
 			</div>
-			<hr>
+			<hr class="my-1">
 			<template id="template_ms_item">
 				<div class="ms-item" data-idx="0" data-dig="" data-cover="" data-flag="" data-mine="">
 					<!-- <div class="ms-item-box"></div> -->
