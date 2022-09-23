@@ -53,6 +53,13 @@
     cursor: pointer;
     padding: 1px;
     position: relative;
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 .ms-item::before{
     pointer-events: none;
