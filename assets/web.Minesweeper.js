@@ -26,7 +26,7 @@ ms.fnInit=(ms)=>{
     const clone = template_ms_item.content.cloneNode(true);
     const msItem = clone.querySelector('.ms-item');
     msItem.dataset.idx = idx;
-    msItem.dataset.delay = idx % maxDelay;
+    msItem.dataset.delay =  Math.floor(Math.random()*10);
     ms.msBoard.appendChild(clone);
   });
   

@@ -81,15 +81,15 @@
 }
 
 
-.ms-item[data-cover="0"]::before{color: #000;}
-.ms-item[data-cover="1"]::before{color: #0099FF;}
-.ms-item[data-cover="2"]::before{color: #12AF30;}
-.ms-item[data-cover="3"]::before{color: red;}
-.ms-item[data-cover="4"]::before{color: #1020FF;}
-.ms-item[data-cover="5"]::before{color: #801900;}
-.ms-item[data-cover="6"]::before{color: #009E5F;}
-.ms-item[data-cover="7"]::before{color: #C500A0;}
-.ms-item[data-cover="8"]::before{color: #FF8900;}
+.ms-item[data-cover="0"]::before{--cover-color: #000;}
+.ms-item[data-cover="1"]::before{--cover-color: #0099FF;}
+.ms-item[data-cover="2"]::before{--cover-color: #12AF30;}
+.ms-item[data-cover="3"]::before{--cover-color: red;}
+.ms-item[data-cover="4"]::before{--cover-color: #1020FF;}
+.ms-item[data-cover="5"]::before{--cover-color: #801900;}
+.ms-item[data-cover="6"]::before{--cover-color: #009E5F;}
+.ms-item[data-cover="7"]::before{--cover-color: #C500A0;}
+.ms-item[data-cover="8"]::before{--cover-color: #FF8900;}
 
 /* .ms-container[data-endding="0"] */
 
@@ -110,9 +110,14 @@
 .ms-container[data-endding="2"] .ms-item::before {
     border: 1px dashed #abc;
     background-color: #fff;
+    color: var(--cover-color);
     content: attr(data-cover);
 }
+.ms-container[data-endding="1"] .ms-item[data-dig="0"]::before,
+.ms-container[data-endding="2"] .ms-item[data-dig="0"]::before{
+    background-color: #eee;
 
+}
 
 
 .ms-item[data-dig="1"][data-cover="0"]::before,
