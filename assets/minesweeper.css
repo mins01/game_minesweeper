@@ -14,7 +14,6 @@
     --grid-item-box-width:calc( var(--board-width) / var(--grid-max-wh));
     box-sizing: border-box;
     text-align: center;
-    padding:20px;
     overflow: hidden;
 }
 @media all and (max-width:500px) {
