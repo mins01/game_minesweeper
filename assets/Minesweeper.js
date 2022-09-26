@@ -51,8 +51,8 @@ class Minesweeper{
         this.endding = 0;
         this.lastIdx = -1;
         this.startDate = null;
-        this.fnStart(this);
         this.drawOrEnd();
+        this.fnStart(this);
     }
     draw(){
         this.fnDraw(this);

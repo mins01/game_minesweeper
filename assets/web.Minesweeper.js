@@ -69,6 +69,13 @@ let fnDraw = (ms)=>{
 ms.fnDraw = fnDraw;
 
 
+ms.fnStart = (ms)=>{
+  ms.gameApp.dataset.start = 'off';
+  setTimeout(()=>{
+    ms.gameApp.dataset.start = 'on';
+  },100);
+}
+
 ms.fnEnd=(ms)=>{
   fnDraw(ms)
   let tm = 0;

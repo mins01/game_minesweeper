@@ -14,6 +14,8 @@
     --grid-item-box-width:calc( var(--board-width) / var(--grid-max-wh));
     box-sizing: border-box;
     text-align: center;
+    padding:20px;
+    overflow: hidden;
 }
 @media all and (max-width:500px) {
 	.ms-container{
@@ -101,8 +103,8 @@
 /* .ms-container[data-endding="0"] */
 
 .ms-item[data-dig="0"]::before{
-    border: 0px dashed #999;
-    background-color: #aaa;
+    border: 0px dashed #94afab;
+    background-color: #94afab;
     color:#fff;
     content: "?";
 }
@@ -195,7 +197,36 @@ ENDDING
 
 
 
+/* data-start=on*/
 
+/* .ms-container[data-start="off"] .ms-board{
+    filter: blur(10px) opacity(0.3);
+}
+.ms-container[data-start="on"] .ms-board{
+    transition: filter 0.5s linear;
+    filter: blur(m) opacity(1);
+} */
+
+.ms-container[data-start="off"] .ms-item{
+    filter: blur(2px) opacity(0.1);
+}
+.ms-container[data-start="on"] .ms-item{
+    filter: blur(0) opacity(1);
+    transition: filter 1s  steps(6, end);;
+}
+.ms-container[data-start="on"] .ms-item[data-delay="0"]{ transition-delay:0s;}
+.ms-container[data-start="on"] .ms-item[data-delay="1"]{ transition-delay:0.1s;}
+.ms-container[data-start="on"] .ms-item[data-delay="2"]{ transition-delay:0.2s;}
+.ms-container[data-start="on"] .ms-item[data-delay="3"]{ transition-delay:0.3s;}
+.ms-container[data-start="on"] .ms-item[data-delay="4"]{ transition-delay:0.4s;}
+.ms-container[data-start="on"] .ms-item[data-delay="5"]{ transition-delay:0.5s;}
+.ms-container[data-start="on"] .ms-item[data-delay="6"]{ transition-delay:0.6s;}
+.ms-container[data-start="on"] .ms-item[data-delay="7"]{ transition-delay:0.7s;}
+.ms-container[data-start="on"] .ms-item[data-delay="8"]{ transition-delay:0.8s;}
+.ms-container[data-start="on"] .ms-item[data-delay="9"]{ transition-delay:0.9s;}
+
+
+/* delay */
 .ms-item[data-delay="0"]::before{ animation-delay:0s;}
 .ms-item[data-delay="1"]::before{ animation-delay:0.1s;}
 .ms-item[data-delay="2"]::before{ animation-delay:0.2s;}
